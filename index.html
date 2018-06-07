@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<!-- register new user -->
   <form id="newUser">
     <input type="text" id="newUsername" placeholder="Pick a username" required>
     <input type="text" id="newName" placeholder="Pick a name" required>
@@ -18,6 +19,7 @@
     </span>
   </form>
   <hr>
+<!-- log in returning user -->
   <form id="returnUser">
     <input type="text" id="username" placeholder="Input username" required>
     <input type="password" id="password" placeholder="Input password" required>
@@ -26,6 +28,7 @@
     </span>
   </form>
   <hr>
+<!-- submit new story -->
   <form id="newStory">
     <input type="text" id="storyAuthor" placeholder="Author" required>
     <input type="text" id="storyTitle" placeholder="Title" required>
@@ -35,12 +38,22 @@
     </span>
   </form>
   <hr> 
+  <!-- list of stories (main page) -->
   <ol id="stories">
 
   </ol>
 <hr>
-<div id="profile">User Profile</div>
+<!-- user profile -->
+<div id="profile">User Profile
+  <div>username: <span id="profUsername"></span></div>
+  <div>name: <span id="profName"></span></div>
+  <ul id="profPosted">Posted stories:
+  </ul>
+  <ul id="profFavs">Favorite stories:
 
+  </ul>
+</div>
+🗑
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <script src="script.js"></script>

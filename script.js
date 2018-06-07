@@ -1,6 +1,8 @@
 $(function() {
   var $ol = $('ol');
 
+  /////////////// get the 10 latest stories //////////////
+
   $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(response => {
     for (let i = 0; i < 10; i++) {
       var story = response.data[i].title;
@@ -18,6 +20,8 @@ $(function() {
       // $body.append($('<div>').text(story));
     }
   });
+
+  /////////////// add or remove from favorites //////////////
 
   $('#stories').on('click', '.star', function(e) {
     // console.log('====');
@@ -67,6 +71,8 @@ $(function() {
     }
   });
 
+  ////////////// create new user //////////////
+
   $('#newUser').on('submit', function(e) {
     e.preventDefault();
     let username = $('#newUsername').val();
@@ -86,6 +92,8 @@ $(function() {
       console.log(response);
     });
   });
+
+  ///////// log in existing user //////////////
 
   $('#returnUser').on('submit', function(e) {
     e.preventDefault();
@@ -110,6 +118,8 @@ $(function() {
     });
   });
 
+  //////////// display user profile /////////////
+
   function displayProfile(username) {
     $.ajax(`https://hack-or-snooze.herokuapp.com/users/${username}`, {
       headers: {
@@ -123,21 +133,80 @@ $(function() {
     })
       .then(response => {
         //
-        $('#profile').append($('<div>').text(response.data.username));
-        $('#profile').append($('<div>').text(response.data.name));
+        $('#profUsername').text(response.data.username);
+        $('#profName').text(response.data.name);
         let favs = response.data.favorites;
         let stories = response.data.stories;
         for (let i = 0; i < favs.length; i++) {
-          $('#profile').append($('<div>').text(favs[i].title));
+          let storyID = favs[i].storyId;
+          let url = favs[i].url;
+          let li = $('<li>').append(
+            $(`<span class="star" id="${storyID}">`).text('★')
+          );
+          $('#profFavs').append(
+            li.append($(`<a href="${url}">`).text(favs[i].title))
+          );
+          // $('#profFavs').append($('<li>').text(favs[i].title));
         }
         for (let i = 0; i < stories.length; i++) {
-          $('#profile').append($('<div>').text(stories[i].title));
+          let storyID = stories[i].storyId;
+
+          $('#profPosted').append(
+            $('<li>')
+              .text(stories[i].title)
+              .append($(`<span class="trash" id="${storyID}">`).text('🗑'))
+          );
         }
       })
       .catch(err => {
         console.log(err);
       });
   }
+
+  /////////////// trash user-posted stories /////////////////
+
+  $('#profPosted').on('click', '.trash', function(e) {
+    // console.log('====');
+    let storyID = e.target.getAttribute('id');
+    $.ajax(`https://hack-or-snooze.herokuapp.com/stories/${storyID}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).then(response => {
+      console.log(response);
+      e.target.parentNode.remove();
+    });
+  });
+
+  //////////////// unfavoriting profile favorites ////////////
+
+  $('#profFavs').on('click', '.star', function(e) {
+    // console.log('====');
+    let storyID = e.target.getAttribute('id');
+    $.ajax(
+      `https://hack-or-snooze.herokuapp.com/users/${localStorage.getItem(
+        'username'
+      )}/favorites/${storyID}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        data: {
+          data: {
+            storyId: storyID,
+            username: localStorage.getItem('username')
+          }
+        }
+      }
+    ).then(response => {
+      console.log(response);
+      e.target.parentNode.remove();
+    });
+  });
+
+  /////// submit new story ///////////////
 
   $('#newStory').on('submit', function(e) {
     e.preventDefault();
