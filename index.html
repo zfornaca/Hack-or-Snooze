@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <form id="newUser">
+    <input type="text" id="newUsername" placeholder="Pick a username" required>
+    <input type="text" id="newName" placeholder="Pick a name" required>
+    <input type="password" id="newPassword" placeholder="Pick a password" required>
+    <span class="button">
+      <button type="submit" id="signUp">Sign up!</button>
+    </span>
+  </form>
+  <hr>
+  <form id="returnUser">
+    <input type="text" id="username" placeholder="Input username" required>
+    <input type="password" id="password" placeholder="Input password" required>
+    <span class="button">
+      <button type="submit" id="signIn">Sign in!</button>
+    </span>
+  </form>
+  <hr>
+  <form id="newStory">
+    <input type="text" id="storyAuthor" placeholder="Author" required>
+    <input type="text" id="storyTitle" placeholder="Title" required>
+    <input type="url" id="storyURL" placeholder="Link" required>
+    <span class="button">
+      <button type="submit" id="submitStory">New story!</button>
+    </span>
+  </form>
+  <hr> 
+  <ol id="stories">
+
+  </ol>
+<hr>
+<div id="profile">User Profile</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>
