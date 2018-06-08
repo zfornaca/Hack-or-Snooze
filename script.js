@@ -1,6 +1,21 @@
 $(function() {
   var $ol = $('ol');
 
+  /////// profile/main toggle ///////////////
+
+  $('#profMainNav').on('click', function(e) {
+    console.log(e.target);
+    if ($(e.target).text() === 'Profile') {
+      $(e.target).text('Main');
+    } else {
+      $(e.target).text('Profile');
+    }
+    $('#submitNav').toggle();
+    // 3) toggle the Main and Profile panes
+    $('#profile').toggle();
+    $('#stories').toggle();
+  });
+
   /////////////// get the 10 latest stories //////////////
 
   $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(response => {

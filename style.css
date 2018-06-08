@@ -1,0 +1,91 @@
+body {
+  font-family: 'Rubik', sans-serif;
+}
+
+#shell {
+  width: 85%;
+  margin: 0 auto;
+}
+
+nav {
+  background-color: orange;
+  padding: 1em;
+}
+
+#newStory {
+  /* display: none; */
+}
+
+a {
+  text-decoration: none;
+  /* color: black; */
+}
+
+.navTitle {
+  font-weight: bold;
+  padding-right: 2em;
+  font-size: large;
+}
+
+ul {
+  background-color: papayawhip;
+  margin-top: 0;
+  padding: 1em;
+  list-style: none;
+}
+
+ul div {
+  display: inline-block;
+}
+
+li > div,
+div > span {
+  padding-left: 0.25em;
+}
+
+.rank {
+  width: 1em;
+  text-align: right;
+}
+
+.postOrigin {
+  font-size: small;
+  color: gray;
+}
+
+label {
+  display: inline-block;
+  width: 5em;
+  text-align: right;
+}
+
+.collapsePanel {
+  padding: 1em;
+  padding-top: 0.5em;
+  background-color: orange;
+}
+
+button {
+  margin-left: 6.5em;
+  padding: 0.75em 1em 0.75em 1em;
+  border-radius: 10%;
+  background-color: darkgray;
+  /* border-color: white; */
+  font-weight: bold;
+  color: white;
+}
+
+button:hover {
+  background-color: rgb(138, 138, 138);
+}
+
+button:hover,
+#submit:hover,
+#favs:hover,
+.star:hover {
+  cursor: pointer;
+}
+
+#profile {
+  display: none;
+}

@@ -5,55 +5,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Hack or Snooze</title>
+  <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<!-- register new user -->
-  <form id="newUser">
-    <input type="text" id="newUsername" placeholder="Pick a username" required>
-    <input type="text" id="newName" placeholder="Pick a name" required>
-    <input type="password" id="newPassword" placeholder="Pick a password" required>
-    <span class="button">
-      <button type="submit" id="signUp">Sign up!</button>
+
+  <nav>
+    <span class="navTitle">Hack or Snooze</span>
+    <span class="navText" id="submitNav">
+      <span class="navText">Submit</span> |
     </span>
-  </form>
+    <span class="navText" id="profMainNav">Profile</span>
+    <span class="navText" id="loginNav">Log in or register</span>
+  </nav>
+
+
+  <!-- log in returning user -->
+  <div class="collapsePanel">
+    <form id="returnUser">
+      <p>
+        <label for="username">username</label>
+        <input type="text" id="username" placeholder="Input username" required>
+      </p>
+      <p>
+        <label for="password">password</label>
+        <input type="password" id="password" placeholder="Input password" required>
+      </p>
+      <span class="button">
+        <button type="submit" id="signIn">Sign in!</button>
+      </span>
+    </form>
+
+    <!-- register new user -->
+    <form id="newUser">
+      <p>
+          <label for="newUsername">username</label>
+          
+          <input type="text" id="newUsername" placeholder="Pick a username" required>
+        </p>
+        <p>
+            <label for="newName">name</label>
+            <input type="text" id="newName" placeholder="Pick a name" required>
+          </p>
+          <p>
+              <label for="newPassword">password</label>
+        <input type="password" id="newPassword" placeholder="Pick a password" required>
+      </p>
+      <span class="button">
+        <button type="submit" id="signUp">Register</button>
+      </span>
+    </form>
+    <hr>
+  </div>
+
+
+
+  <!-- submit new story -->
+  <div class="collapsePanel" id="newStory">
+    <form>
+      <p>
+        <label for="storyAuthor">author</label>
+        <input type="text" id="storyAuthor" placeholder="Author" required>
+      </p>
+      <p>
+        <label for="storyTitle">title</label>
+        <input type="text" id="storyTitle" placeholder="Title" required>
+      </p>
+      <p>
+        <label for="storyURL">link</label>
+        <input type="url" id="storyURL" placeholder="Link" required>
+      </p>
+      <span class="button">
+        <button type="submit" id="submitStory">New story!</button>
+      </span>
+    </form>
+  </div>
   <hr>
-<!-- log in returning user -->
-  <form id="returnUser">
-    <input type="text" id="username" placeholder="Input username" required>
-    <input type="password" id="password" placeholder="Input password" required>
-    <span class="button">
-      <button type="submit" id="signIn">Sign in!</button>
-    </span>
-  </form>
-  <hr>
-<!-- submit new story -->
-  <form id="newStory">
-    <input type="text" id="storyAuthor" placeholder="Author" required>
-    <input type="text" id="storyTitle" placeholder="Title" required>
-    <input type="url" id="storyURL" placeholder="Link" required>
-    <span class="button">
-      <button type="submit" id="submitStory">New story!</button>
-    </span>
-  </form>
-  <hr> 
   <!-- list of stories (main page) -->
   <ol id="stories">
 
   </ol>
-<hr>
-<!-- user profile -->
-<div id="profile">User Profile
-  <div>username: <span id="profUsername"></span></div>
-  <div>name: <span id="profName"></span></div>
-  <ul id="profPosted">Posted stories:
-  </ul>
-  <ul id="profFavs">Favorite stories:
+  <hr>
+  <!-- user profile -->
+  <div id="profile">User Profile
+    <div>username:
+      <span id="profUsername"></span>
+    </div>
+    <div>name:
+      <span id="profName"></span>
+    </div>
+    <ul id="profPosted">Posted stories:
+    </ul>
+    <ul id="profFavs">Favorite stories:
 
-  </ul>
-</div>
-🗑
+    </ul>
+  </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <script src="script.js"></script>
