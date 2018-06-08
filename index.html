@@ -11,96 +11,105 @@
 </head>
 
 <body>
+  <div id="shell">
+    <nav>
+      <div class="navDiv">
+        <span class="navTitle">Hack or Snooze</span>
+        <span class="navText" id="submitNav">
+          <span class="navText">Submit</span> |
+        </span>
+        <span class="navText" id="profMainNav">Profile</span>
+        <span class="navText" id="loginNav">Log in or register</span>
+      </div>
+      <div class="navDiv">
+          <span class="navText" id="logoutNav">Log out</span>
+      </div>
+    </nav>
 
-  <nav>
-    <span class="navTitle">Hack or Snooze</span>
-    <span class="navText" id="submitNav">
-      <span class="navText">Submit</span> |
-    </span>
-    <span class="navText" id="profMainNav">Profile</span>
-    <span class="navText" id="loginNav">Log in or register</span>
-  </nav>
 
+    <!-- log in returning user -->
+    <div class="collapsePanel" id="loginRegPanelHide">
+      <div id="loginRegPanel">
+        <form id="returnUser">
+          <h3>Log in</h3>
+          <p>
+            <label for="username">username</label>
+            <input type="text" id="username" placeholder="Input username" required>
+          </p>
+          <p>
+            <label for="password">password</label>
+            <input type="password" id="password" placeholder="Input password" required>
+          </p>
+          <span class="button">
+            <button type="submit" id="signIn">Log in</button>
+          </span>
+        </form>
 
-  <!-- log in returning user -->
-  <div class="collapsePanel">
-    <form id="returnUser">
-      <p>
-        <label for="username">username</label>
-        <input type="text" id="username" placeholder="Input username" required>
-      </p>
-      <p>
-        <label for="password">password</label>
-        <input type="password" id="password" placeholder="Input password" required>
-      </p>
-      <span class="button">
-        <button type="submit" id="signIn">Sign in!</button>
-      </span>
-    </form>
+        <!-- register new user -->
+        <form id="newUser">
+          <h3>Register</h3>
+          <p>
+            <label for="newUsername">username</label>
 
-    <!-- register new user -->
-    <form id="newUser">
-      <p>
-          <label for="newUsername">username</label>
-          
-          <input type="text" id="newUsername" placeholder="Pick a username" required>
-        </p>
-        <p>
-            <label for="newName">name</label>
+            <input type="text" id="newUsername" placeholder="Pick a username" required>
+          </p>
+          <p>
+            <label for="newName">nickname</label>
             <input type="text" id="newName" placeholder="Pick a name" required>
           </p>
           <p>
-              <label for="newPassword">password</label>
-        <input type="password" id="newPassword" placeholder="Pick a password" required>
-      </p>
-      <span class="button">
-        <button type="submit" id="signUp">Register</button>
-      </span>
-    </form>
-    <hr>
-  </div>
-
-
-
-  <!-- submit new story -->
-  <div class="collapsePanel" id="newStory">
-    <form>
-      <p>
-        <label for="storyAuthor">author</label>
-        <input type="text" id="storyAuthor" placeholder="Author" required>
-      </p>
-      <p>
-        <label for="storyTitle">title</label>
-        <input type="text" id="storyTitle" placeholder="Title" required>
-      </p>
-      <p>
-        <label for="storyURL">link</label>
-        <input type="url" id="storyURL" placeholder="Link" required>
-      </p>
-      <span class="button">
-        <button type="submit" id="submitStory">New story!</button>
-      </span>
-    </form>
-  </div>
-  <hr>
-  <!-- list of stories (main page) -->
-  <ol id="stories">
-
-  </ol>
-  <hr>
-  <!-- user profile -->
-  <div id="profile">User Profile
-    <div>username:
-      <span id="profUsername"></span>
+            <label for="newPassword">password</label>
+            <input type="password" id="newPassword" placeholder="Pick a password" required>
+          </p>
+          <span class="button">
+            <button type="submit" id="signUp">Register</button>
+          </span>
+        </form>
+      </div>
     </div>
-    <div>name:
-      <span id="profName"></span>
-    </div>
-    <ul id="profPosted">Posted stories:
-    </ul>
-    <ul id="profFavs">Favorite stories:
 
-    </ul>
+
+    <!-- submit new story -->
+    <div class="collapsePanel" id="newStory">
+      <h3>Submit a new story</h3>
+      <form>
+        <p>
+          <label for="storyAuthor">author</label>
+          <input type="text" id="storyAuthor" placeholder="Author" required>
+        </p>
+        <p>
+          <label for="storyTitle">title</label>
+          <input type="text" id="storyTitle" placeholder="Title" required>
+        </p>
+        <p>
+          <label for="storyURL">link</label>
+          <input type="url" id="storyURL" placeholder="Link" required>
+        </p>
+        <span class="button">
+          <button type="submit" id="submitStory">Submit story</button>
+        </span>
+      </form>
+    </div>
+
+    <!-- list of stories (main page) -->
+    <ol id="stories">
+
+    </ol>
+
+    <!-- user profile -->
+    <div id="profile"><h3>User Profile</h3>
+      <div>username:
+        <span id="profUsername"></span>
+      </div>
+      <div>name:
+        <span id="profName"></span>
+      </div>
+      <ul id="profPosted">
+      </ul>
+      <ul id="profFavs">
+
+      </ul>
+    </div>
   </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>

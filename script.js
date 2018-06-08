@@ -1,19 +1,63 @@
+//////////// June 7 evening changes //////////
+/*
+1) Added 'submit' toggle
+2) Made all toggles (incl. 'profile'/'main') slide
+3) centered site w/in page
+4) changed styling of page title and login/register/submit headers
+5) (for debugging) clicking on "Hack or Snooze" refreshes profile
+6) added cursor:pointer behavior to all interactive elements
+7) added "Log out" button, changed header structure to show that on far right
+8) "posted" stories in profile are now hyperlinked
+9) header & panel visibility logic complete
+10) when submit panel is visible and 'profile' clicked, submit panel recedes 
+11) site checks for login upon load
+12) "display profile" function updates profile, rather than appending to existing profile
+13) updating profile refreshes profile
+
+*/
+
 $(function() {
   var $ol = $('ol');
 
   /////// profile/main toggle ///////////////
 
   $('#profMainNav').on('click', function(e) {
-    console.log(e.target);
     if ($(e.target).text() === 'Profile') {
+      $('#newStory').slideUp('fast');
       $(e.target).text('Main');
     } else {
       $(e.target).text('Profile');
     }
     $('#submitNav').toggle();
     // 3) toggle the Main and Profile panes
-    $('#profile').toggle();
-    $('#stories').toggle();
+    $('#profile').slideToggle('fast');
+    $('#stories').slideToggle('fast');
+  });
+
+  /////////// submit toggle /////////////
+
+  $('#submitNav').on('click', function() {
+    $('#newStory').slideToggle('fast');
+  });
+
+  /////////// login/register toggle /////////////
+
+  $('#loginNav').on('click', function() {
+    $('#loginRegPanelHide').slideToggle('fast');
+  });
+
+  ///////////// log out ////////////////
+  $('#logoutNav').on('click', function() {
+    localStorage.setItem('token', '');
+    localStorage.setItem('username', '');
+    $('#profMainNav').hide();
+    $('#profMainNav').text('Profile');
+    $('#submitNav').hide();
+    $('#newStory').hide();
+    $('#loginNav').show();
+    $('#logoutNav').hide();
+    $('#stories').show();
+    $('#profile').hide();
   });
 
   /////////////// get the 10 latest stories //////////////
@@ -23,16 +67,10 @@ $(function() {
       var story = response.data[i].title;
       var url = response.data[i].url;
       var storyID = response.data[i].storyId;
-      console.log(storyID);
-      console.log(story);
       let li = $('<li>').append(
         $(`<span class="star" id="${storyID}">`).text('☆')
       );
       $ol.append(li.append($(`<a href="${url}">`).text(story)));
-      // let li = $('<li>').append($(`<span>`).text('☆'));
-      // $ol.append(li).append($(`<a href="${url}">`).text(story));
-      // $(`<a src="${url}">`).text(story)
-      // $body.append($('<div>').text(story));
     }
   });
 
@@ -59,7 +97,6 @@ $(function() {
           }
         }
       ).then(response => {
-        console.log(response);
         $(e.target).text('★');
       });
     } else if ($(e.target).text() === '★') {
@@ -80,7 +117,6 @@ $(function() {
           }
         }
       ).then(response => {
-        console.log(response);
         $(e.target).text('☆');
       });
     }
@@ -93,9 +129,6 @@ $(function() {
     let username = $('#newUsername').val();
     let name = $('#newName').val();
     let password = $('#newPassword').val();
-    console.log(username);
-    console.log(name);
-    console.log(password);
     e.target.reset();
     $.post('https://hack-or-snooze.herokuapp.com/users', {
       data: {
@@ -129,8 +162,20 @@ $(function() {
       localStorage.setItem('token', token);
       console.log(localStorage.getItem('token'));
       console.log(token);
+      // login slide toggles
+      $('#profMainNav').toggle();
+      $('#submitNav').toggle();
+      $('#loginNav').toggle();
+      $('#logoutNav').toggle();
+      $('#loginRegPanelHide').slideToggle('fast');
       displayProfile(username);
     });
+  });
+
+  ///////// refresh user profile ///////////
+  /// to make debugging less awkward
+  $('.navTitle').on('click', function() {
+    displayProfile(localStorage.getItem('username'));
   });
 
   //////////// display user profile /////////////
@@ -152,11 +197,17 @@ $(function() {
         $('#profName').text(response.data.name);
         let favs = response.data.favorites;
         let stories = response.data.stories;
+        $('#profFavs').empty();
+        let favsTitle = $('<h3>').text('Your favorites:');
+        $('#profFavs').append(favsTitle);
+        $('#profPosted').empty();
+        let postedTitle = $('<h3>').text('Your posted stories:');
+        $('#profPosted').append(postedTitle);
         for (let i = 0; i < favs.length; i++) {
           let storyID = favs[i].storyId;
           let url = favs[i].url;
           let li = $('<li>').append(
-            $(`<span class="star" id="${storyID}">`).text('★')
+            $(`<span class="star" id="${storyID}">`).text('★ ')
           );
           $('#profFavs').append(
             li.append($(`<a href="${url}">`).text(favs[i].title))
@@ -165,11 +216,13 @@ $(function() {
         }
         for (let i = 0; i < stories.length; i++) {
           let storyID = stories[i].storyId;
+          let url = stories[i].url;
+          let li = $('<li>').append(
+            $(`<a href="${url}">`).text(stories[i].title)
+          );
 
           $('#profPosted').append(
-            $('<li>')
-              .text(stories[i].title)
-              .append($(`<span class="trash" id="${storyID}">`).text('🗑'))
+            $(li).append($(`<span class="trash" id="${storyID}">`).text(' 🗑'))
           );
         }
       })
@@ -190,9 +243,19 @@ $(function() {
       }
     }).then(response => {
       console.log(response);
-      e.target.parentNode.remove();
+      displayProfile(localStorage.getItem('username'));
     });
   });
+
+  /////// check for login on page load ////////
+  if (localStorage.getItem('token')) {
+    $('#profMainNav').toggle();
+    $('#submitNav').toggle();
+    $('#loginNav').toggle();
+    $('#logoutNav').toggle();
+    $('#loginRegPanelHide').slideUp('fast');
+    displayProfile(localStorage.getItem('username'));
+  }
 
   //////////////// unfavoriting profile favorites ////////////
 
@@ -217,7 +280,7 @@ $(function() {
       }
     ).then(response => {
       console.log(response);
-      e.target.parentNode.remove();
+      displayProfile(localStorage.getItem('username'));
     });
   });
 

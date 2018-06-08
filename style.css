@@ -10,10 +10,21 @@ body {
 nav {
   background-color: orange;
   padding: 1em;
+  display: flex;
+  justify-content: space-between;
 }
 
-#newStory {
-  /* display: none; */
+h2 {
+  display: inline-block;
+}
+
+#newStory,
+#loginRegPanelHide,
+#profile,
+#profMainNav,
+#logoutNav,
+#submitNav {
+  display: none;
 }
 
 a {
@@ -24,7 +35,7 @@ a {
 .navTitle {
   font-weight: bold;
   padding-right: 2em;
-  font-size: large;
+  font-size: x-large;
 }
 
 ul {
@@ -66,7 +77,7 @@ label {
 }
 
 button {
-  margin-left: 6.5em;
+  margin-left: 7.75em;
   padding: 0.75em 1em 0.75em 1em;
   border-radius: 10%;
   background-color: darkgray;
@@ -82,10 +93,29 @@ button:hover {
 button:hover,
 #submit:hover,
 #favs:hover,
-.star:hover {
+.star:hover,
+.trash:hover,
+#profMainNav,
+#submitNav,
+.navTitle,
+#loginNav,
+#logoutNav {
   cursor: pointer;
 }
 
-#profile {
-  display: none;
+#loginRegPanel {
+  display: flex;
+  justify-content: left;
+}
+
+form {
+  margin-right: 5em;
+}
+
+.navDiv {
+  display: inline-block;
+}
+
+#logoutNav {
+  font-size: small;
 }
