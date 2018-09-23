@@ -47,37 +47,41 @@ $(function() {
   function displayMainFeed() {
     let userFavorites = [];
     let username = localStorage.getItem('username');
-    $.ajax(`https://hack-or-snooze.herokuapp.com/users/${username}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    }).then(res => {
-      let faves = res.data.favorites;
-      if (faves.length > 0) {
-        userFavorites = res.data.favorites.map(fave => fave.storyId);
-      }
-      $ol.empty();
-      $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(
-        response => {
-          for (let i = 0; i < 10; i++) {
-            var story = response.data[i].title;
-            var url = response.data[i].url;
-            var storyID = response.data[i].storyId;
-            let li = $('<li>').append(
-              $(`<span class="star" id="${storyID}">`).text('☆')
-            );
-            if (userFavorites.includes(storyID)) {
-              li = $('<li>').append(
-                $(`<span class="star" id="${storyID}">`).text('★')
-              );
-            }
-            $ol.append(li.append($(`<a href="${url}">`).text(story)));
-          }
+    if (username) {
+      $.ajax(`https://hack-or-snooze.herokuapp.com/users/${username}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
-      );
+      }).then(res => {
+        let faves = res.data.favorites;
+        if (faves.length > 0) {
+          userFavorites = res.data.favorites.map(fave => fave.storyId);
+        }
+      });
+    }
+    $ol.empty();
+    $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(response => {
+      for (let i = 0; i < 10; i++) {
+        var story = response.data[i].title;
+        var url = response.data[i].url;
+        var storyID = response.data[i].storyId;
+        let li = $('<li>').append(
+          $(`<span class="star" id="${storyID}">`).text('☆')
+        );
+        if (userFavorites.includes(storyID)) {
+          li = $('<li>').append(
+            $(`<span class="star" id="${storyID}">`).text('★')
+          );
+        }
+        $ol.append(li.append($(`<a href="${url}">`).text(story)));
+      }
     });
   }
+
+  /////////////// get user favorites //////////////////
+
+  function getUserFavorites() {}
 
   /////////////// get the initial 10 latest stories //////////////
   displayMainFeed();
