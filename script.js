@@ -1,21 +1,3 @@
-//////////// June 7 evening changes //////////
-/*
-1) Added 'submit' toggle
-2) Made all toggles (incl. 'profile'/'main') slide
-3) centered site w/in page
-4) changed styling of page title and login/register/submit headers
-5) (for debugging) clicking on "Hack or Snooze" refreshes profile
-6) added cursor:pointer behavior to all interactive elements
-7) added "Log out" button, changed header structure to show that on far right
-8) "posted" stories in profile are now hyperlinked
-9) header & panel visibility logic complete
-10) when submit panel is visible and 'profile' clicked, submit panel recedes 
-11) site checks for login upon load
-12) "display profile" function updates profile, rather than appending to existing profile
-13) updating profile refreshes profile
-
-*/
-
 $(function() {
   var $ol = $('ol');
 
@@ -60,24 +42,49 @@ $(function() {
     $('#profile').hide();
   });
 
-  /////////////// get the 10 latest stories //////////////
+  /////////////// display main feed ///////////////
 
-  $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(response => {
-    for (let i = 0; i < 10; i++) {
-      var story = response.data[i].title;
-      var url = response.data[i].url;
-      var storyID = response.data[i].storyId;
-      let li = $('<li>').append(
-        $(`<span class="star" id="${storyID}">`).text('☆')
+  function displayMainFeed() {
+    let userFavorites = [];
+    let username = localStorage.getItem('username');
+    $.ajax(`https://hack-or-snooze.herokuapp.com/users/${username}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).then(res => {
+      let faves = res.data.favorites;
+      if (faves.length > 0) {
+        userFavorites = res.data.favorites.map(fave => fave.storyId);
+      }
+      $ol.empty();
+      $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(
+        response => {
+          for (let i = 0; i < 10; i++) {
+            var story = response.data[i].title;
+            var url = response.data[i].url;
+            var storyID = response.data[i].storyId;
+            let li = $('<li>').append(
+              $(`<span class="star" id="${storyID}">`).text('☆')
+            );
+            if (userFavorites.includes(storyID)) {
+              li = $('<li>').append(
+                $(`<span class="star" id="${storyID}">`).text('★')
+              );
+            }
+            $ol.append(li.append($(`<a href="${url}">`).text(story)));
+          }
+        }
       );
-      $ol.append(li.append($(`<a href="${url}">`).text(story)));
-    }
-  });
+    });
+  }
+
+  /////////////// get the initial 10 latest stories //////////////
+  displayMainFeed();
 
   /////////////// add or remove from favorites //////////////
 
   $('#stories').on('click', '.star', function(e) {
-    // console.log('====');
     let storyID = e.target.getAttribute('id');
     if ($(e.target).text() === '☆') {
       $.ajax(
@@ -98,6 +105,7 @@ $(function() {
         }
       ).then(response => {
         $(e.target).text('★');
+        displayProfile(localStorage.getItem('username'));
       });
     } else if ($(e.target).text() === '★') {
       $.ajax(
@@ -118,6 +126,8 @@ $(function() {
         }
       ).then(response => {
         $(e.target).text('☆');
+        displayProfile(localStorage.getItem('username'));
+        displayMainFeed();
       });
     }
   });
@@ -136,9 +146,7 @@ $(function() {
         name: name,
         password: password
       }
-    }).then(response => {
-      console.log(response);
-    });
+    }).then(response => {});
   });
 
   ///////// log in existing user //////////////
@@ -147,8 +155,6 @@ $(function() {
     e.preventDefault();
     let username = $('#username').val();
     let password = $('#password').val();
-    console.log(username);
-    console.log(password);
     e.target.reset();
     $.post('https://hack-or-snooze.herokuapp.com/auth/', {
       data: {
@@ -156,12 +162,9 @@ $(function() {
         password: password
       }
     }).then(response => {
-      console.log(response);
       localStorage.setItem('username', username);
       let token = response.data.token;
       localStorage.setItem('token', token);
-      console.log(localStorage.getItem('token'));
-      console.log(token);
       // login slide toggles
       $('#profMainNav').toggle();
       $('#submitNav').toggle();
@@ -170,12 +173,6 @@ $(function() {
       $('#loginRegPanelHide').slideToggle('fast');
       displayProfile(username);
     });
-  });
-
-  ///////// refresh user profile ///////////
-  /// to make debugging less awkward
-  $('.navTitle').on('click', function() {
-    displayProfile(localStorage.getItem('username'));
   });
 
   //////////// display user profile /////////////
@@ -234,7 +231,6 @@ $(function() {
   /////////////// trash user-posted stories /////////////////
 
   $('#profPosted').on('click', '.trash', function(e) {
-    // console.log('====');
     let storyID = e.target.getAttribute('id');
     $.ajax(`https://hack-or-snooze.herokuapp.com/stories/${storyID}`, {
       method: 'DELETE',
@@ -242,8 +238,8 @@ $(function() {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     }).then(response => {
-      console.log(response);
       displayProfile(localStorage.getItem('username'));
+      displayMainFeed();
     });
   });
 
@@ -260,7 +256,6 @@ $(function() {
   //////////////// unfavoriting profile favorites ////////////
 
   $('#profFavs').on('click', '.star', function(e) {
-    // console.log('====');
     let storyID = e.target.getAttribute('id');
     $.ajax(
       `https://hack-or-snooze.herokuapp.com/users/${localStorage.getItem(
@@ -279,8 +274,8 @@ $(function() {
         }
       }
     ).then(response => {
-      console.log(response);
       displayProfile(localStorage.getItem('username'));
+      displayMainFeed();
     });
   });
 
@@ -291,7 +286,6 @@ $(function() {
     let title = $('#storyTitle').val();
     let author = $('#storyAuthor').val();
     let link = $('#storyURL').val();
-    console.log(link);
     e.target.reset();
     $.ajax('https://hack-or-snooze.herokuapp.com/stories', {
       method: 'POST',
@@ -307,7 +301,8 @@ $(function() {
         }
       }
     }).then(response => {
-      console.log(response);
+      displayProfile(localStorage.getItem('username'));
+      displayMainFeed();
     });
   });
 });
