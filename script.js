@@ -47,7 +47,7 @@ $(function() {
   function displayMainFeed() {
     let userFavorites = [];
     let username = localStorage.getItem('username');
-    if (username) {
+    if (username !== null) {
       $.ajax(`https://hack-or-snooze.herokuapp.com/users/${username}`, {
         method: 'GET',
         headers: {
