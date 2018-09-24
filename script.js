@@ -40,26 +40,36 @@ $(function() {
     $('#logoutNav').hide();
     $('#stories').show();
     $('#profile').hide();
+    loadMainFeed();
   });
 
-  /////////////// display main feed ///////////////
+  /////////////// load main feed ///////////////
 
-  function displayMainFeed() {
-    let userFavorites = [];
-    let username = localStorage.getItem('username');
-    if (username !== null) {
-      $.ajax(`https://hack-or-snooze.herokuapp.com/users/${username}`, {
+  function loadMainFeed() {
+    $.ajax(
+      `https://hack-or-snooze.herokuapp.com/users/${localStorage.getItem(
+        'username'
+      )}`,
+      {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
-      }).then(res => {
-        let faves = res.data.favorites;
-        if (faves.length > 0) {
-          userFavorites = res.data.favorites.map(fave => fave.storyId);
-        }
+      }
+    )
+      .then(res => {
+        let faves = res.data.favorites.map(fave => fave.storyId);
+        displayMainFeed(faves);
+      })
+      .catch(err => {
+        let faves = [];
+        displayMainFeed(faves);
       });
-    }
+  }
+
+  /////////////// display user favorites //////////////////
+
+  function displayMainFeed(faves) {
     $ol.empty();
     $.getJSON('https://hack-or-snooze.herokuapp.com/stories').then(response => {
       for (let i = 0; i < 10; i++) {
@@ -69,7 +79,7 @@ $(function() {
         let li = $('<li>').append(
           $(`<span class="star" id="${storyID}">`).text('☆')
         );
-        if (userFavorites.includes(storyID)) {
+        if (faves.includes(storyID)) {
           li = $('<li>').append(
             $(`<span class="star" id="${storyID}">`).text('★')
           );
@@ -79,12 +89,8 @@ $(function() {
     });
   }
 
-  /////////////// get user favorites //////////////////
-
-  function getUserFavorites() {}
-
   /////////////// get the initial 10 latest stories //////////////
-  displayMainFeed();
+  loadMainFeed();
 
   /////////////// add or remove from favorites //////////////
 
@@ -131,7 +137,7 @@ $(function() {
       ).then(response => {
         $(e.target).text('☆');
         displayProfile(localStorage.getItem('username'));
-        displayMainFeed();
+        loadMainFeed();
       });
     }
   });
@@ -176,6 +182,7 @@ $(function() {
       $('#logoutNav').toggle();
       $('#loginRegPanelHide').slideToggle('fast');
       displayProfile(username);
+      loadMainFeed();
     });
   });
 
@@ -243,7 +250,7 @@ $(function() {
       }
     }).then(response => {
       displayProfile(localStorage.getItem('username'));
-      displayMainFeed();
+      loadMainFeed();
     });
   });
 
@@ -279,7 +286,7 @@ $(function() {
       }
     ).then(response => {
       displayProfile(localStorage.getItem('username'));
-      displayMainFeed();
+      loadMainFeed();
     });
   });
 
@@ -306,7 +313,7 @@ $(function() {
       }
     }).then(response => {
       displayProfile(localStorage.getItem('username'));
-      displayMainFeed();
+      loadMainFeed();
     });
   });
 });
